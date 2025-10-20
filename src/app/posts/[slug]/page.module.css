@@ -1,0 +1,159 @@
+.container{
+    display: flex;
+    flex-direction: column;
+   
+    gap: 50px;
+    margin-top: 100px;
+}
+.container{
+    box-sizing: border-box;
+    padding: 0 12px;
+    max-width: 100%;
+    overflow-x: hidden;
+}
+.info{
+
+    gap: 20px;
+}
+.infoLeft{
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+}
+.title{
+    font-size: 50px;
+    font-weight: bold;
+    flex: 5;
+}
+.userInfo{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    color: #888;
+    flex: 2;
+}
+.userImg{
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+.userDetail{
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    font-size: 14px;
+    color: var(--softTextColor);
+}
+.imageContainer{
+    flex: 1;
+    position: relative;
+    height: 350px;
+   
+}
+.image{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.content{
+    display: flex;
+    gap: 50px;
+    flex-wrap: wrap;
+
+}
+.post{
+   
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    font-size: 18px;
+    flex: 5;
+    min-width: 0; /* allow shrinking inside flex container */
+
+
+
+}
+
+.postText{
+    color: var(--softTextColor);
+    
+
+}
+.postText p{
+    margin-bottom: 20px;
+}
+
+/* Ensure any images or long content inside the post scale on small screens */
+.postText img{
+    max-width: 100%;
+    height: auto;
+}
+
+/* Break long words/URLs to avoid overflow */
+.postText,
+.title{
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+.menu{
+  
+  flex: 2;
+  
+}
+@media screen and (max-width: 1024px) {
+  .info {
+    flex-direction: column;
+    gap: 50px;
+  }
+   /* .imageContainer{
+    display: none;
+   } */
+    .userInfo {
+        justify-content: flex-start;
+        gap: 20px;
+        margin-bottom: 20px;
+    }
+
+  .menu {
+    display: none;
+  }
+  .title{
+    font-size: 30px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+    .container{
+        padding: 0 8px;
+        gap: 20px;
+        margin-top: 60px;
+    }
+
+    .imageContainer{
+        height: 180px;
+    }
+
+    .title{
+        font-size: 22px;
+        line-height: 1.2;
+    }
+
+    .content{
+        gap: 16px;
+    }
+
+    .post{
+        font-size: 16px;
+    }
+
+    .userImg{
+        width: 36px;
+        height: 36px;
+    }
+}

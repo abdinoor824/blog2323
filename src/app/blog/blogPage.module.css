@@ -1,0 +1,16 @@
+.container{
+    margin-top: 100px;
+}
+
+.title{
+    background-color: crimson;
+    color: white;
+    text-align: center;
+   padding: 5px 10px;
+   text-transform: capitalize;
+   
+}
+.content{
+    display: flex;
+    gap: 50px;
+}

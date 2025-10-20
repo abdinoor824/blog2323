@@ -1,0 +1,127 @@
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id             String          @id @default(auto()) @map("_id") @db.ObjectId
+  name           String?
+  email          String          @unique
+  emailVerified  DateTime?
+  image          String?
+  accounts       Account[]
+  sessions       Session[]
+  Authenticators Authenticator[]
+
+  // ✅ Proper relations for blog models
+  posts    Post[]    @relation("UserPosts")
+  comments Comment[] @relation("UserComments")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Account {
+  id                String  @id @default(auto()) @map("_id") @db.ObjectId
+  userId            String  @db.ObjectId
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.String
+  access_token      String? @db.String
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.String
+  session_state     String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // ✅ Keep only the real relation
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  sessionToken String   @unique
+  userId       String   @db.ObjectId
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model VerificationToken {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  identifier String
+  token      String
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model Authenticator {
+  credentialID         String  @id @map("_id")
+  userId               String  @db.ObjectId
+  providerAccountId    String
+  credentialPublicKey  String
+  counter              Int
+  credentialDeviceType String
+  credentialBackedUp   Boolean
+  transports           String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, credentialID])
+}
+
+model Category {
+  id    String  @id @default(cuid()) @map("_id")
+  slug  String  @unique
+  title String
+  image  String?
+  posts Post[]
+}
+
+model Post {
+  id        String   @id @default(cuid()) @map("_id")
+  createdAt DateTime @default(now())
+  slug      String   @unique
+  title     String
+  desc      String
+  image      String?
+  views     Int      @default(0)
+  catSlug   String
+  userEmail String
+
+  // ✅ Use matching relation name "UserPosts"
+  cat      Category?  @relation(fields: [catSlug], references: [slug], onDelete: Cascade)
+  user     User      @relation("UserPosts", fields: [userEmail], references: [email], onDelete: Cascade)
+  comments Comment[]
+
+  @@index([catSlug])
+  @@index([userEmail])
+}
+
+model Comment {
+  id        String   @id @default(cuid()) @map("_id")
+  createdAt DateTime @default(now())
+  desc      String
+  userEmail String
+  postSlug  String
+
+  // ✅ Use matching relation name "UserComments"
+  user User @relation("UserComments", fields: [userEmail], references: [email], onDelete: Cascade)
+  post Post @relation(fields: [postSlug], references: [slug], onDelete: Cascade)
+
+  @@index([postSlug])
+  @@index([userEmail])
+}
