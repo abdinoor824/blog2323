@@ -2,23 +2,12 @@ import React from 'react'
 import styles from "./category.module.css"
 import Link from 'next/link'
 import Image from 'next/image'
-  
-
-const getData = async () => {
-  const res = await fetch("http://localhost:3000/api/categories", {
-    cache: "no-store"
-  });
-
-  if (!res.ok) {
-    throw new Error("failed");
-  }
-
-  return res.json();
-};
+import { prisma } from '@/utils/connect'
 
 const CategoryList = async () => {
-  const data = await getData();
-  const categories = Array.isArray(data) ? data : data?.categories || [];
+  // Query DB directly on the server — avoid calling localhost during build/deploy
+  const data = await prisma.category.findMany();
+  const categories = Array.isArray(data) ? data : [];
 
   return (
     <div className={styles.container}>
@@ -30,10 +19,10 @@ const CategoryList = async () => {
             className={`${styles[item.slug]} ${styles.style}`}
             key={item.id}
           >
-            {item.image && (
+            {(item.img || item.image) && (
               <Image
-                src={item.image}
-                alt=''
+                src={item.img ?? item.image}
+                alt={item.title || ''}
                 width={32}
                 height={32}
                 className={styles.image}
