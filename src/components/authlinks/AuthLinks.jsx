@@ -1,27 +1,37 @@
 "use client"
 
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import styles from "./authlinks.module.css"
 import Link from 'next/link'
 import { signOut, useSession } from 'next-auth/react'
 const AuthLinks = () => {
   const [open, setOpen] = useState(false)
-  const { status } = useSession()
-  const menuRef = useRef(null)
+  const {status} = useSession()
 
+  // Handle body scroll lock
   useEffect(() => {
-    if (!open) return; // only attach when menu is open
-
-    const handlePointerDown = (e) => {
-      if (menuRef.current && !menuRef.current.contains(e.target)) {
-        setOpen(false)
-      }
+    if (open) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
     }
+    // Cleanup function to ensure body scroll is restored
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [open]);
 
-    // use pointerdown for earlier detection on touch devices
-    document.addEventListener('pointerdown', handlePointerDown)
-    return () => document.removeEventListener('pointerdown', handlePointerDown)
-  }, [open])
+  // Close menu when clicking a link
+  const handleLinkClick = () => {
+    setOpen(false);
+  };
+
+  // Toggle menu
+  const toggleMenu = (e) => {
+    e.stopPropagation();
+    setOpen(!open);
+  };
+
   return (
 
     
@@ -39,32 +49,53 @@ const AuthLinks = () => {
         <span className={styles.link} onClick={signOut}>logout</span>
          </>
       )}
-      <div className={styles.burger} onClick={(e)=> { e.stopPropagation(); setOpen(!open) }}>
-           <div className={styles.line}></div>
-             <div className={styles.line}></div>
-               <div className={styles.line}></div>
+      <div 
+        className={`${styles.burger} ${open ? styles.active : ''}`} 
+        onClick={toggleMenu}
+        aria-expanded={open}
+        role="button"
+        tabIndex={0}
+      >
+        <div className={styles.line}></div>
+        <div className={styles.line}></div>
+        <div className={styles.line}></div>
       </div>
       {open && (
-        <div className={styles.responsiveMenu} ref={menuRef} onClick={(e)=> e.stopPropagation()}>
-          <Link href="/" onClick={() => setOpen(false)}>home</Link>
-          <Link href="/about" onClick={() => setOpen(false)}>contact</Link>
-          <Link href="/contact" onClick={() => setOpen(false)}>home</Link>
-
+        <div className={styles.responsiveMenu}>
+          <Link href="/" onClick={handleLinkClick}>Home</Link>
+          <Link href="/about" onClick={handleLinkClick}>About</Link>
+          <Link href="/contact" onClick={handleLinkClick}>Contact</Link>
+          
           {status === "unauthenticated" ? (
-            <Link href="/login" onClick={() => setOpen(false)}>
+            <Link href="/login" onClick={handleLinkClick}>
               Login
             </Link>
           ) : (
             <>
-              <Link href="/write" onClick={() => setOpen(false)}>
+              <Link href="/write" onClick={handleLinkClick}>
                 Write
               </Link>
-              <span onClick={() => { setOpen(false); signOut(); }} >logout</span>
+              <span 
+                onClick={() => {
+                  handleLinkClick();
+                  signOut();
+                }}
+                className={styles.menuLink}
+              >
+                Logout
+              </span>
             </>
           )}
 
-        </div>
-      )}
+
+      </div>
+     )
+
+     
+     
+
+
+     }
     </>
   )
 }

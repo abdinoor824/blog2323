@@ -42,6 +42,13 @@ const WritePage = () => {
       if (file) {
         imageUrl = await handleUpload();
       }
+      console.log('[WRITE] imageUrl after upload:', imageUrl);
+
+      // If an image was chosen but upload failed (no URL), abort to avoid creating a post with null image
+      if (file && !imageUrl) {
+        alert('Image upload failed — post not created. Check server logs for upload errors.');
+        return;
+      }
 
       // 🧹 Clean HTML tags from Quill editor value
       const plainDesc = value.replace(/<[^>]*>?/gm, "").trim();
@@ -52,14 +59,29 @@ const WritePage = () => {
         body: JSON.stringify({
           title,
           desc: plainDesc, // ✅ store clean text only
-          image: imageUrl, // match Prisma schema
+          // send both keys: `img` is what Prisma expects, `image` keeps forward compatibility
+          img: imageUrl,
+          image: imageUrl,
         }),
       });
+
+      const resBody = await res.text();
+      let parsed;
+      try {
+        parsed = JSON.parse(resBody);
+      } catch (e) {
+        parsed = { message: resBody };
+      }
 
       if (res.ok) {
         router.push("/");
       } else {
-        console.error("Failed to create post");
+        // show detailed error in console and a friendly alert
+        console.group("Failed to create post");
+        console.error("status:", res.status);
+        console.error("response:", parsed);
+        console.groupEnd();
+        alert(parsed?.message || `Failed to create post (status ${res.status})`);
       }
     } catch (error) {
       console.error(error);

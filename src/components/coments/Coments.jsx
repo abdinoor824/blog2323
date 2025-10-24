@@ -23,7 +23,7 @@ const fetcher = async (url)=>{
 const Coments = ({postSlug}) => {
 
     const {status} = useSession();
-    const {data ,mutate, isLoading,error} =useSWR(`/api/coments?postSlug=${postSlug}`, fetcher);
+    const {data ,mutate, isLoading,error} =useSWR(`http://localhost:3000/api/coments?postSlug=${postSlug}`, fetcher);
 if (error) return <div className={styles.error}>Failed to load comments.</div>;
 
 

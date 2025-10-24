@@ -3,21 +3,29 @@ import styles from './page.module.css'
 import Image from 'next/image'
 import Menu from '@/components/menu/Menu'
 import Coments from '@/components/coments/Coments'
+import { prisma } from '@/utils/connect'
 
 
 
 
 const getData = async (slug) => {
-    const res = await fetch(`http://localhost:3000/api/posts/${slug}`, {
-        cache: "no-store"
+    // Query the database directly from the server component to avoid
+    // making an internal HTTP request (which requires an absolute URL
+    // during SSR and can fail with "Invalid URL").
+    const post = await prisma.post.findUnique({
+        where: { slug },
+        include: { user: true },
     });
-    if (!res) {
-        throw new Error("failed")
-    }
-    return res.json()
+    if (!post) return null;
+
+    // Normalize fields for the frontend
+    return {
+        ...post,
+        image: post?.image ?? post?.img ?? null,
+        createdAt: post.createdAt ? post.createdAt.toISOString() : null,
+    };
 }
 const SinglePage = async ({ params }) => {
-    // `params` may be async in the Next.js app router; await before using its properties
     const { slug } = await params;
     const data = await getData(slug);
     return (
@@ -48,7 +56,7 @@ const SinglePage = async ({ params }) => {
 
 
                     <div className={styles.postComents}>
-                        <Coments postSlug={slug}/>
+                        <Coments postSlug={slug} />
                     </div>
                 </div>
                 <div className={styles.menu}>

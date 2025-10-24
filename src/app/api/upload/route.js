@@ -28,6 +28,7 @@ export const POST = async (req) => {
         .end(buffer);
     });
 
+    console.log('[POST /api/upload] uploaded to cloudinary:', result?.secure_url);
     return NextResponse.json({ url: result.secure_url });
   } catch (error) {
     console.error("Upload error:", error);

@@ -2,7 +2,6 @@ import {prisma} from "@/utils/connect"
 import { NextResponse } from "next/server"
   // get single post 
 export const GET = async (req, { params }) => {
-    // `params` can be an async object in the app router; await to access properties.
     const { slug } = await params;
 
    try{
@@ -13,10 +12,10 @@ export const GET = async (req, { params }) => {
         }
     )
   
-   // Normalize post so frontend can use `image` property (map from existing `img`)
-   const response = { ...post, image: post?.img ?? post?.image ?? null };
-
-   return NextResponse.json(response, { status: 200 });
+       // Normalize post so frontend can use `image` property (map from existing `img`)
+       const response = { ...post, image: post?.image ?? post?.img ?? null };
+       console.log('[GET /api/posts/[slug]] response image:', response.image);
+       return NextResponse.json(response, { status: 200 });
 
     }catch (err) {
      console.log(err)

@@ -1,10 +1,17 @@
-.container{
+.container {
     display: flex;
     justify-content: space-between;
-
-
+    align-items: center;
+    gap: 20px;
 }
-.button{
+
+.pageNumber {
+    font-size: 1rem;
+    font-weight: 500;
+    color: #666;
+}
+
+.button {
     background-color: rgb(16, 92, 47);
     color: white;
     border: none;
