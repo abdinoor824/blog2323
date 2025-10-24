@@ -1,14 +1,21 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // ✅ Enable app directory support (for Next.js 13+)
+  experimental: {
+    appDir: true,
+  },
+
+  // ✅ Tell Next.js your source code is inside `/src`
+  srcDir: "src",
+
+  // ✅ Allow external images (Google & Cloudinary)
   images: {
     remotePatterns: [
-      // ✅ Allow Google profile images (NextAuth)
       {
         protocol: "https",
         hostname: "lh3.googleusercontent.com",
         pathname: "/**",
       },
-      // ✅ Allow Cloudinary hosted images
       {
         protocol: "https",
         hostname: "res.cloudinary.com",
