@@ -1,6 +1,6 @@
-import {prisma} from "../../../../utils/connect"
+import {prisma} from "@/utils/connect"
 import { NextResponse } from "next/server"
-import { getAuthSession } from "../../../../utils/auth";
+import { getAuthSession } from "@/utils/auth";
 export const GET = async (req) =>{
     // Ensure we have a complete URL by using the request URL as base
     const url = new URL(req.url, process.env.NEXTAUTH_URL || 'http://localhost:3000');

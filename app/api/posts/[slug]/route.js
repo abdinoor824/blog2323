@@ -1,4 +1,4 @@
-import {prisma} from "../../../../../utils/connect"
+import {prisma} from "@/utils/connect"
 import { NextResponse } from "next/server"
   // get single post 
 export const GET = async (req, { params }) => {

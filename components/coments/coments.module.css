@@ -1,0 +1,76 @@
+.container{
+  margin-top: 50px;
+}
+.title{
+    font-size: 20px;
+    font-weight: bold;
+    color: var(--softTextColor);
+    margin-bottom: 30px;
+}
+.write{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 30px;
+    color: black;
+    width: 70px;
+
+
+}
+.input{
+  
+    padding: 20px;
+    border-radius: 5px;
+     width: 70px;
+    color: var(--softTextColor);
+    resize: none;
+}
+.coments{
+    display: flex;
+    flex-direction: column;
+   
+    margin-top: 20px;
+    margin-bottom: 20px;
+
+}
+.coment{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+.user{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.avator{
+   
+    object-fit: cover;
+    border-radius: 50%; ;
+}
+.userInfo{
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    color: var(--softTextColor);
+}
+.desc{
+    color: var(--textColor);
+    font-size: 14px;
+}
+
+    .button {
+  padding: 16px 20px;
+  background-color: teal;
+  color: white;
+  font-weight: bold;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+@media screen and (max-width:640) {
+    .input{
+        width: 200px;
+        height: 40px;
+    }
+}
