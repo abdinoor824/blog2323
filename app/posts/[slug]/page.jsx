@@ -3,7 +3,7 @@ import styles from './page.module.css'
 import Image from 'next/image'
 import Menu from '@/components/menu/Menu'
 import Coments from '@/components/coments/Coments'
-import { prisma } from '../../../../utils/connect'
+import { prisma } from '@/utils/connect'
 
 
 
