@@ -7,8 +7,10 @@ import Link from "next/link";
 import Menu from "@/components/menu/Menu";
 import CategoryList from "@/components/categoryList/CategoryList";
 
-export default function Home({searchParams}) {
-  const page = parseInt(searchParams.page) || 1;
+export default async function Home({ searchParams }) {
+  // searchParams is an async proxy in the App Router — await it before using
+  const params = await searchParams;
+  const page = parseInt(params?.page) || 1;
   return (
   <>
 <div className="container">
